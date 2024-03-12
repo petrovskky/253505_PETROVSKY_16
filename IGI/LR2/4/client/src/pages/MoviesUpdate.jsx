@@ -1,39 +1,69 @@
 import React, { Component } from 'react'
 import api from '../api'
-
 import styled from 'styled-components'
 
+const lightTheme = {
+    primaryColor: '#212529',
+    dangerColor: '#dc3545',
+};
+
 const Title = styled.h1.attrs({
-    className: 'h1',
-})``
+    className: 'h2',
+})`
+    color: ${props => props.theme.primaryColor};
+    margin: 5px 5px 0px;
+`;
 
 const Wrapper = styled.div.attrs({
     className: 'form-group',
 })`
-    margin: 0 30px;
-`
+    margin: 0 auto;
+    width: 600px;
+`;
 
 const Label = styled.label`
     margin: 5px;
-`
+    font-size: 1.2em;
+    text-align: center;
+`;
 
 const InputText = styled.input.attrs({
     className: 'form-control',
 })`
     margin: 5px;
-`
+    width: 100%;
+    font-size: 1.2em;
+    color: ${props => props.theme.primaryColor};
+    background-color: ${props => props.theme.primaryColor};
+    width: 100%;
+`;
 
 const Button = styled.button.attrs({
     className: `btn btn-primary`,
 })`
     margin: 15px 15px 15px 5px;
-`
+    background-color: ${props => props.theme.primaryColor};
+    padding: 10px 20px;
+    font-size: 1.2em;
+    width: 100%;
+`;
 
 const CancelButton = styled.a.attrs({
     className: `btn btn-danger`,
 })`
     margin: 15px 15px 15px 5px;
-`
+    background-color: ${props => props.theme.dangerColor};
+    padding: 10px 20px;
+    font-size: 1.2em;
+    width: 100%;
+`;
+
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-left: 20px;
+`;
 
 class MoviesUpdate extends Component {
     constructor(props) {
@@ -95,16 +125,16 @@ class MoviesUpdate extends Component {
         const { name, rating, time } = this.state
         return (
             <Wrapper>
-                <Title>Create Movie</Title>
+                <Title theme={lightTheme}>Update Movie</Title>
 
-                <Label>Name: </Label>
+                <Label>Name:</Label>
                 <InputText
                     type="text"
                     value={name}
                     onChange={this.handleChangeInputName}
                 />
 
-                <Label>Rating: </Label>
+                <Label>Rating:</Label>
                 <InputText
                     type="number"
                     step="0.1"
@@ -116,15 +146,21 @@ class MoviesUpdate extends Component {
                     onChange={this.handleChangeInputRating}
                 />
 
-                <Label>Time: </Label>
+                <Label>Time:</Label>
                 <InputText
                     type="text"
                     value={time}
                     onChange={this.handleChangeInputTime}
                 />
-
-                <Button onClick={this.handleUpdateMovie}>Update Movie</Button>
-                <CancelButton href={'/movies/list'}>Cancel</CancelButton>
+                
+                <ButtonContainer>
+                    <Button onClick={this.handleUpdateMovie}>
+                        Update Movie
+                    </Button>
+                    <CancelButton href={'/movies/list'}>
+                        Cancel
+                    </CancelButton>
+                </ButtonContainer>
             </Wrapper>
         )
     }

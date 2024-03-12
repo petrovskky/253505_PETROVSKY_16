@@ -19,7 +19,7 @@ class Links extends Component {
         return (
             <React.Fragment>
                 <Link to="/" className="navbar-brand">
-                    Simple MERN Application
+                    Docker Compose Petrovsky 253505
                 </Link>
                 <Collapse>
                     <List>
