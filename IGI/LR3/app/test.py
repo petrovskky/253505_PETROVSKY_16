@@ -1,4 +1,4 @@
-import math
-import os
+str = '''Calculates the average length of words in a string and finds all words \
+that have that length.'''
 
-print(round(3.5, 0))
+print(str)

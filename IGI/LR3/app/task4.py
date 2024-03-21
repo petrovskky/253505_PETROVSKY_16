@@ -5,24 +5,35 @@ Author: Petrovsky, 253505
 Date: 01.03.2024
 '''
 
-from utils import *
+from utils import decorator, word_divider, print_task, results_divider
 
-task = '''Task: write a program to analyze a string initialized in the program code.
+TASK = '''Task: write a program to analyze a string initialized in the \
+program code.
 
-Option 16 ==>   a) determine the number of words ending with a consonant;
-                b) find the average length of words in a line, rounding the result to \
-integer, and print all words that have that length, \
-or the message “There are no words of length n characters in the line”;
+Option 16 ==>   a) determine the number of words ending with \
+a consonant;
+                b) find the average length of words in a line, \
+rounding the result to integer, and print all words that have \
+that length, or the message “There are no words of length n \
+characters in the line”;
                 c) print every seventh word'''
 
-str = '''So she was considering in her own mind, as well as she could, \
-for the hot day made her feel very sleepy and stupid, whether the pleasure of making \
-a daisy-chain would be worth the trouble of getting up and picking the daisies, when \
-suddenly a White Rabbit with pink eyes ran close by her.'''
+STR = '''So she was considering in her own mind, as well as she \
+could, for the hot day made her feel very sleepy and stupid, whether \
+the pleasure of making a daisy-chain would be worth the trouble of \
+getting up and picking the daisies, when suddenly a White Rabbit \
+with pink eyes ran close by her.'''
 
-def count_consonant_words(words):
-    '''Counts the number of words ending with a consonant (including 'y').'''
+def count_consonant_words(words: list) -> int:
+    """Counts the number of words in a list ending with a consonant.
 
+    Args:
+        words (list): A list of words to count.
+
+    Returns:
+        int: The total count of words ending with a consonant.
+
+    """
     consonant_count = 0
     consonants = "bcdfghjklmnpqrstvwxyz"
 
@@ -32,33 +43,48 @@ def count_consonant_words(words):
 
     return consonant_count
 
-def average_length_words(words):
-    '''Calculates the average length of words in a string and finds all words that have that length.'''
+def average_length_words(words: list) -> tuple[int, list]:
+    """Calculates the average length of words in a list and returns \
+words with that length.
 
+    Args:
+        words (list): A list of words.
+
+    Returns:
+        tuple[int, list]: A tuple containing the average length and \
+a list of words with that length.
+
+    """
     lengths = [len(word) for word in words]
 
     if len(lengths) == 0:
         return 0, []
 
     average_length = round(sum(lengths) / len(lengths))
-    words_with_avg_length = [word for word in words if len(word) == average_length]
+    words_with_avg_length = [
+        word for word in words if len(word) == average_length
+    ]
 
     return average_length, words_with_avg_length
 
 @decorator
 def main():
-    '''Run Task 4. Processes the source data and outputs the result.'''
+    """Run Task 4. Processes the source data and outputs the result.
 
+    """
     word_divider('Task 4. String parsing'.upper())
-    print_task(task)
+    print_task(TASK)
 
-    print('Default string:', str)
+    print('Default string:', STR)
 
-    words = str.replace(',', '').replace('.', '').lower().split()
+    words = STR.replace(',', '').replace('.', '').lower().split()
 
     results_divider()
 
-    print('Number of words ending with a consonant:', count_consonant_words(words))
+    print(
+        'Number of words ending with a consonant:',
+        count_consonant_words(words)
+    )
 
     avg_len, avg_list = average_length_words(words)
 
@@ -72,7 +98,6 @@ def main():
     seventh_words = words[6::7]  # Finding every seventh word using a slice.
 
     print('Every seventh word: ', ', '.join(seventh_words), '.', sep='')
-
 
 if __name__=="__main__":
     main()
