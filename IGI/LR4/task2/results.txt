@@ -1,0 +1,18 @@
+General task
+Number of sentences: 15
+Number of narrative sentences: 12
+Number of interrogative sentences: 0
+Number of imperative sentences: 3
+Average sentence length: 29.466666666666665
+Average word length: 3.683333333333333
+Number of smileys: []
+
+Option 16 task
+Replaced text: Our Vacation
+Ev$ year we go to Florida. We like to go to the be$.
+My favorite be$ is called Emerson Be$. It is very long, with soft sand and palm tr$. It is very beautiful. I like to make sandcastles and wa$ the sailboats go by. Sometimes th$ are dolphins and whales in the wa$!
+Ev$ morning 08:00 we look for shells in the sand. I fo$ fifteen big shells last year. I put them in a special pl$ in my room. This year I want to le$ to surf. It is hard to surf, but so much fun! My sister is a good surfer. She says that she can te$ me. I hope I can do it!
+Time constructions: ['08:00']
+Max length word count: 1
+Words with "," or "." after: ['Florida', 'beach', 'Beach', 'long', 'trees', 'beautiful', 'by', 'sand', 'year', 'room', 'surf', 'surf', 'surfer', 'me']
+Max length word ends with "e": favorite
