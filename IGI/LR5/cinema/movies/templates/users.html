@@ -1,0 +1,44 @@
+{% extends "base_generic.html" %}
+{% block title %}Users{% endblock title %}
+{% block header %}Cinema users{% endblock header %}
+{% block content %}
+<table>
+    <tr>
+        <th>Staff</th>
+    </tr>
+    {% for employee in staff %}
+    <tr>
+        <td>{{ employee.username }}</td>
+        <td>
+            <form action="edit" method="get">
+                <input type="hidden" name="employee_id" value="{{ employee.id }}"></input>
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+        <td>
+            <form action="{% url 'make_client' employee.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Make client</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<table>
+    <tr>
+        <th>Clients</th>
+    </tr>
+    {% for client in clients %}
+    <tr>
+        <td>{{ client.username }}</td>
+        <td>
+            <form action="{% url 'make_employee' client.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Make employee</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

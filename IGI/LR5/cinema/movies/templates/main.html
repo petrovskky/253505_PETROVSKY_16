@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema{% endblock title %}
+{% block styles %}
+<style>
+    img {
+        height: 610px;
+        width: 1000px;
+    }
+</style>
+{% endblock styles %}
+{% block header %}Main Page{% endblock header %}
+{% block content %}
+{% load static %}
+<p>
+    <img src="{% static 'cinema-main-photo.png' %}">
+</p>
+<p>
+    How to get to us?
+</p>
+<p>
+    <img src="{% static 'route.jpg' %}">
+</p>
+{% endblock content %}

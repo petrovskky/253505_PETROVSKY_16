@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Genres{% endblock title %}
+{% block header %}Genres{% endblock header %}
+{% block content %}
+<p>
+<form action="/afisha/genres/create">
+    <input type="submit" value="Add genre">
+</form>
+</form>
+</p>
+<table>
+    <tr>
+        <th>Genre</th>
+        <th>Action</th>
+    </tr>
+    {% for genre in genres %}
+    <tr>
+        <td>{{ genre.name}}</td>
+        <td>
+            <p>
+            <form action="/afisha/genres/delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="genre_id" value="{{ genre.id }}">
+                <input type="submit" value="Delete">
+            </form>
+            <form action="/afisha/genres/edit" method="get">
+                <input type="hidden" name="genre_id" value="{{ genre.id }}">
+                <input type="submit" value="Edit">
+            </form>
+            </p>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Movie{% endblock title %}
+{% block styles %}
+<style>
+    img {
+        height: 400px;
+        width: 280px;
+    }
+</style>
+{% endblock styles %}
+{% block content %}
+<h2>{{ movie.title }}</h2>
+{% if perms.movies.can_add_movie %}
+{% endif %}
+<img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+<p>Age: {{ movie.age_category }}+</p>
+<p>Rate: {{ movie.rate }}</p>
+<p>Genre: {{ movie.genres.all|join:', ' }}</p>
+<p>Duration: {{ movie.duration }}</p>
+<p>Description: {{ movie.description }}</p>
+<div>
+    Dates:
+    {% for showtime in showtimes %}
+    <p>
+        {{ forloop.counter }})
+        {{ showtime.time|date:"d F" }}, Hall: {{ showtime.hall }}, Time: {{ showtime.time|time:"H:i" }}
+        {% if user.is_authenticated %}
+    <form action="{% url 'make_ticket' showtime.id %}" method="get">
+        {% csrf_token %}
+        <input type="submit" value="Buy">
+    </form>
+    {% endif %}
+    </p>
+    {% endfor %}
+</div>
+{% endblock content %}

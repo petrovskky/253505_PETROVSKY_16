@@ -1,0 +1,44 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Reviews{% endblock title %}
+{% block header %}Reviews{% endblock header %}
+{% block content %}
+<form action="create" method="get">
+    <button type="submit">Add review</button>
+</form>
+{% if reviews %}
+<table>
+    {% for review in reviews %}
+    {% if not forloop.first %}
+    <tr>
+        <td>------------------------------------------</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td>Username: {{ review.user.username }}</td>
+    </tr>
+    <tr>
+        <td>Rate: {{ review.rate }}</td>
+    </tr>
+    <tr>
+        <td>Description: {{ review.description }}</td>
+    </tr>
+    <tr>
+        <td>Time: {{ review.time }}</td>
+    </tr>
+    {% if user.is_superuser %}
+    <tr>
+        <td>
+            <form action="delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="review_id" value="{{ review.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+{% else %}
+<p>There is no data to display.</p>
+{% endif %}
+{% endblock content %}

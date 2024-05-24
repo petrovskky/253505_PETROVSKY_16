@@ -1,0 +1,28 @@
+<!-- <table>
+    <tr>
+        <th>
+            Movie
+        </th>
+        <th>
+            Tickets sold
+        </th>
+        <th>
+            Total revenue
+        </th>
+    </tr>
+    {% for movie, stat in movie_stats.items %}
+    <tr>
+        <td>
+            {{ movie }}
+        </td>
+        <td>
+            {{ stat.tickets_sold }}
+        </td>
+        <td>
+            {{ stat.revenue }}
+        </td>
+    </tr>
+    {% endfor %}
+</table> -->
+{{ histogram_tickets|safe }}
+{{ histogram_revenue|safe }}

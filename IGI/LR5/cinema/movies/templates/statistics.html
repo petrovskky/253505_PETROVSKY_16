@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Stat{% endblock title %}
+{% block header %}Statistics{% endblock header %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="stat_type">Statisctics for:</label>
+    <select id="stat_type" name="stat_type">
+        <option value="clients">Clients</option>
+        <option value="movies">Movies</option>
+    </select>
+
+    <button type="submit">Get statistics</button>
+</form>
+{% if stat_type == 'movies' %}
+{% include 'movies_stat.html' %}
+{% elif stat_type == 'clients' %}
+{% include 'clients_stat.html' %}
+{% endif %}
+{% endblock content %}

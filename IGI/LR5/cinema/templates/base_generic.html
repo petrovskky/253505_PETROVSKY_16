@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Cinema{% endblock title %}</title>
+    {% block styles %}{% endblock styles %}
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+        }
+
+        /* img {
+            height: 400px;
+            width: 280px;
+        } */
+    </style>
+</head>
+
+<body>
+    <div>
+        <a href="/">Main</a> |
+        <a href="/afisha">Poster</a> |
+        <a href="/news">News</a> |
+        <a href="/info">Info</a> |
+        <a href="/contacts">Contacts</a> |
+        <a href="/reviews">Reviews</a> |
+        <a href="/coupons">Coupons</a> |
+        <a href="/privacy">Privacy policy</a>
+        {% if user.is_staff %}
+        | <a href="/tickets">Tickets</a>
+        {% endif %}
+        {% if user.is_superuser %}
+        | <a href="/users">Staff</a>
+        | <a href="/statistics">Statistics</a>
+        {% endif %}
+        {% if user.is_authenticated %}
+        | <a href="/profile">Profile</a>
+        User: {{ user.username }}
+        <form action="{% url 'logout'%}?next={{request.path}}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login'%}?next={{request.path}}">| Login</a>
+        {% endif %}
+    </div>
+    <h1 class="wrapper">{% block header %}{% endblock header %}</h1>
+    <div class="wrapper">{% block content %}{% endblock content %}</div>
+    <div>Petrovsky 2024.</div>
+</body>
+
+</html>

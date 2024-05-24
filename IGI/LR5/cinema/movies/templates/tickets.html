@@ -1,0 +1,79 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Tickets{% endblock title %}
+{% block header %}Tickets{% endblock header %}
+{% block content %}
+<p>
+<form action="" method="get">
+    Sold from
+    <input type="date" name="from_date" value="{{ selected_from_date }}" lang="en" onchange="this.form.submit()">
+    to
+    <input type="date" name="to_date" value="{{ selected_to_date }}" lang="en" onchange="this.form.submit()">
+</form>
+</p>
+
+<p>
+<form action="" method="get">
+    <input type="text" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}">
+    <input type="submit" value="Search">
+</form>
+
+<form action="" method="get">
+    <input type="text" name="client_username" placeholder="Client name" value="{{ client_username }}">
+    <input type="submit" value="Search">
+</form>
+
+<form action="" method="get">
+    <input type="text" name="cashier_username" placeholder="Cashier name" value="{{ cashier_username }}">
+    <input type="submit" value="Search">
+</form>
+</p>
+
+<p>
+    <form action="" method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</p>
+
+<p>
+    Profit: {{ profit }}
+</p>
+
+<table>
+    <tr>
+        <th>Movie</th>
+        <th>Client</th>
+        <th>Cashier</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Price</th>
+        {% if user.is_superuser %}
+        <th>Action</th>
+        {% endif %}
+    </tr>
+    {% for ticket in tickets %}
+    <tr>
+        <td>{{ ticket.showtime.movie.title }}</td>
+        <td>{{ ticket.client.username }}</td>
+        <td>{{ ticket.cashier.user.username }}</td>
+        <td>{{ ticket.time|date:"Y-m-d" }}</td>
+        <td>{{ ticket.time|time:"H:i" }}</td>
+        <td>{{ ticket.showtime.price }}</td>
+        {% if user.is_superuser %}
+        <td>
+            <p>
+            <form action="delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                <input type="submit" value="Delete">
+            </form>
+            <form action="edit" method="get">
+                <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                <input type="submit" value="Edit">
+            </form>
+            </p>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

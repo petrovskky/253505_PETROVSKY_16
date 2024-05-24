@@ -1,0 +1,57 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Contacts{% endblock title %}
+{% block styles %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    th, td {
+        text-align: center;
+        border: 1px solid;
+    }
+
+    td p {
+        margin: 7px;
+    }
+
+    img {
+        height: 280px;
+        width: 280px;
+    }
+</style>
+{% endblock styles %}
+{% block header %}Contacts{% endblock header %}
+{% block content %}
+<table>
+    <tr>
+        {% for employee in staff %}
+        {% if forloop.counter0|divisibleby:3 and not forloop.first %}
+    </tr><tr>
+        {% endif %}
+        <td>
+            {% if employee.user.photo %}
+            <img src="{{ employee.user.photo.url }}" alt="{{ employee.user.username }}">
+            {% else %}
+            {% load static %}
+            <img src="{% static 'default_employee_photo.png' %}">
+            {% endif %}
+            <p>Name: {{ employee.user }}</p>
+            <p>Position: {{ employee.position }}</p>
+            <p>Phone number: {{ employee.user.phone_number }}</p>
+            <p>Email: {{ employee.user.email }}</p>
+        </td>
+        {% endfor %}
+        {% if movies|length < 3 and movies|length > 0 %} {# чтобы если всего меньше 3 фильмов, то каждый занимал 1/3 место в таблице #}
+            {% if movies|length_is:"2" %}
+                <td></td>
+            {% else %}
+                <td></td>
+                <td></td>
+            {% endif %}
+        {% endif %} {# чтобы если всего меньше 3 фильмов, то каждый занимал 1/3 место в таблице #}
+    </tr>
+</table>
+{% endblock content %}

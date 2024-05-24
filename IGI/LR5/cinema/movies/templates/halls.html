@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Halls{% endblock title %}
+{% block header %}Halls{% endblock header %}
+{% block content %}
+<p>
+<form action="create">
+    <input type="submit" value="Add hall">
+</form>
+</p>
+<table>
+    <tr>
+        <th>Hall</th>
+        <th>Capacity</th>
+        <th>Action</th>
+    </tr>
+    {% for hall in halls %}
+    <tr>
+        <td>{{ hall.name }}</td>
+        <td>{{ hall.capacity }}</td>
+        <td>
+            <p>
+            <form action="delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="hall_id" value="{{ hall.id }}">
+                <input type="submit" value="Delete">
+            </form>
+            <form action="edit" method="get">
+                <input type="hidden" name="hall_id" value="{{ hall.id }}">
+                <input type="submit" value="Edit">
+            </form>
+            </p>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

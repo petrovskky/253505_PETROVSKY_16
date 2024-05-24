@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Edit {{ item_name }}{% endblock title %}
+{% block header %}Edit {{ item_name }}{% endblock header %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Edit</button>
+</form>
+{% endblock content %}

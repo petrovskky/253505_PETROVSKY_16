@@ -1,0 +1,42 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema News{% endblock title %}
+{% block styles %}
+<style>
+    img {
+        height: 280px;
+        width: auto;
+    }
+</style>
+{% endblock styles %}
+{% block header %}News{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<p>
+    <form action="create" method="get">
+        <input type="submit" value="Add news">
+    </form>
+</p>
+{% endif %}
+<table>
+    {% for news in news_list %}
+    <tr>
+        <td><img src="{{ news.image.url }}" alt="{{ news.title }}"></td>
+        <td><strong>{{ news.title }}</strong></td>
+        <td>{{ news.description }}</td>
+        {% if user.is_superuser %}
+        <td>
+            <form action="edit" method="get">
+                <input type="hidden" name="news_id" value="{{ news.id }}">
+                <input type="submit" value="Edit">
+            </form>
+            <form action="delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="news_id" value="{{ news.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

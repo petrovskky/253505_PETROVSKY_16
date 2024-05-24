@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Coupons{% endblock title %}
+{% block header %}Coupons{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<p>
+<form action="create" post="get">
+    <input type="submit" value="Create coupon">
+</form>
+</p>
+{% endif %}
+{% if coupons %}
+<table>
+    {% for coupon in coupons %}
+    <tr>
+        <td><strong>Code phrase: </strong>{{ coupon.code_phrase }}</td>
+        <td><strong>Discount: </strong>{{ coupon.discount }}</td>
+        {% if user.is_superuser %}
+        <td>
+            <form action="delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="coupon_id" value="{{ coupon.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>
+    There are no coupons now.
+</p>
+{% endif %}
+{% endblock content %}

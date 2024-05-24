@@ -1,0 +1,105 @@
+{% extends "base_generic.html" %}
+{% block title %}Movie poster{% endblock title %}
+{% block styles %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    th, td {
+        text-align: center;
+        border: 1px solid;
+    }
+
+    td p {
+        margin: 7px;
+    }
+
+    img {
+        height: 400px;
+        width: 280px;
+    }
+</style>
+{% endblock styles %}
+{% block header %}
+Poster - Minsk
+{% endblock header %}
+{% block content %}
+<form method="GET" action="/afisha/">
+    Date:
+    <input type="date" name="date" value="{{ selected_date }}" lang="en" onchange="this.form.submit()">
+    Genre:
+    <select name="genre" onchange="this.form.submit()">
+        <option value="">All genres</option>
+        {% for genre in genres %}
+            {% if genre|lower == selected_genre %}
+                <option value="{{ genre|lower }}" selected>{{ genre }}</option>
+            {% else %}
+                <option value="{{ genre|lower }}">{{ genre }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+</form>
+<p>
+    <form method="GET" action="/afisha/">
+        <input type="text" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}">
+        <button type="submit">Search</button>
+    </form>
+</p>
+<p>
+    <form action="" method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</p>
+<br>
+{% if user.is_superuser %}
+<p>
+    <form action="/afisha/movies">
+        <input type="submit" value="Movies"></form>
+    </form>
+</p>
+<p>
+    <form action="/afisha/genres">
+        <input type="submit" value="Genres"></form>
+    </form>
+</p>
+<p>
+    <form action="/afisha/halls">
+        <input type="submit" value="Halls"></form>
+    </form>
+</p>
+<p>
+    <form action="/afisha/showtimes">
+        <input type="submit" value="Showtimes"></form>
+    </form>
+</p>
+{% endif %}
+{% if movies %}
+<table>
+    <tr>
+        {% for movie in movies %}
+        {% if forloop.counter0|divisibleby:3 and not forloop.first %}
+    </tr><tr>
+        {% endif %}
+        <td>
+            <h2><a href="/afisha/{{ movie.id }}">{{ movie.title }}</a></h2>
+            <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+            <p>Age: {{ movie.age_category }}+</p>
+            <p>Genre: {{ movie.genres.all|join:', ' }}</p>
+            <p>Duration: {{ movie.duration }}</p>
+        </td>
+        {% endfor %}
+        {% if movies|length < 3 and movies|length > 0 %} {# чтобы если всего меньше 3 фильмов, то каждый занимал 1/3 место в таблице #}
+            {% if movies|length_is:"2" %}
+                <td></td>
+            {% else %}
+                <td></td>
+                <td></td>
+            {% endif %}
+        {% endif %} {# чтобы если всего меньше 3 фильмов, то каждый занимал 1/3 место в таблице #}
+    </tr>
+</table>
+{% endif %}
+{% endblock content %}

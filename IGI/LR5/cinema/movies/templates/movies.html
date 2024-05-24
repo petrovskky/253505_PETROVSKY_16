@@ -1,0 +1,70 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Movies{% endblock title %}
+{% block header %}Movies{% endblock header %}
+{% block content %}
+<form action="" method="get" >
+    Filter
+    <select name="genre" onchange="this.form.submit()">
+        <option value="">All genres</option>
+        {% for genre in genres %}
+            {% if genre|lower == selected_genre %}
+                <option value="{{ genre|lower }}" selected>{{ genre }}</option>
+            {% else %}
+                <option value="{{ genre|lower }}">{{ genre }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <input type="text" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}">
+    <input type="text" name="movie_country" placeholder="Country" value="{{ search_movie_country }}">
+    <button type="submit">Search</button>
+</form>
+
+<p>
+    <form action="" method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</p>
+
+<br>
+
+<p>
+<form action="create">
+    <input type="submit" value="Add movie">
+</form>
+</form>
+</p>
+<table>
+    <tr>
+        <th>Movie</th>
+        <th>Age</th>
+        <th>Rate</th>
+        <th>Genres</th>
+        <th>Country</th>
+        <th>Duration</th>
+        <th>Action</th>
+    </tr>
+    {% for movie in movies %}
+    <tr>
+        <td>{{ movie.title }}</td>
+        <td>{{ movie.age_category }}</td>
+        <td>{{ movie.rate }}</td>
+        <td>{{ movie.genres.all|join:", " }}</td>
+        <td>{{ movie.country }}</td>
+        <td>{{ movie.duration }}</td>
+        <td>
+            <p>
+            <form action="delete" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                <input type="submit" value="Delete">
+            </form>
+            <form action="edit" method="get">
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                <input type="submit" value="Edit">
+            </form>
+            </p>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}

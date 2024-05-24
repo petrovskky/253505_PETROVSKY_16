@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Information{% endblock title %}
+{% block header %}Information{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<p>
+    <form action="edit" post="get">
+        <input type="submit" value="Edit">
+    </form>
+</p>
+{% endif %}
+{% if info %}
+{{ info|linebreaks }}
+{% else %}
+No information.
+{% endif %}
+{% endblock content %}
