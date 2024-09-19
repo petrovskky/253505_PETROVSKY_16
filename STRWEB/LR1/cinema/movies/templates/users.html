@@ -1,0 +1,67 @@
+{% extends "base_generic.html" %}
+{% block title %}Users{% endblock title %}
+{% block header %}Cinema users{% endblock header %}
+{% block content %}
+<div><a href="positions">Position Management</a></div>
+
+
+<section>
+    <h2>Staff Management</h2>
+    <table> 
+        <caption>Staff List</caption>
+        <thead>
+            <tr>
+                <th>Staff</th>
+                {% if user.is_superuser %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in staff %}
+            <tr>
+                <td>{{ employee.username }}</td>
+                <td>
+                    <form action="edit" method="get">
+                        <input type="hidden" name="employee_id" value="{{ employee.id }}"></input>
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="{% url 'make_client' employee.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Make client</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Client Management</h2>
+    <table>
+        <caption>User List</caption>
+        <thead>
+            <tr>
+                <th>Clients</th>
+                {% if user.is_superuser %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.username }}</td>
+                <td>
+                    <form action="{% url 'make_employee' client.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Make employee</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

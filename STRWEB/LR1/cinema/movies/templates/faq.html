@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+{% block title %}FAQ - Starlight Cinema{% endblock title %}
+{% block header %}FAQ{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<div>
+    <form method="get" action="create">
+        <button type="submit" tabindex="1">Add answer</button>
+    </form>
+</div>
+{% endif %}
+
+<div>
+    {% for faq in faqs %}
+    <details>
+        <summary>
+            <b>{{ faq.question }}</b> <i><small><time datetime="{{ faq.time|date:'Y-m-d' }}">{{ faq.time|date }}</small></i>
+        </summary>
+        <p>{{ faq.answer }}</p>
+    </details>
+    {% if user.is_superuser %}
+    <div>
+        <form method="get" action="edit">
+            <input type="hidden" name="faq_id" value="{{ faq.id }}">
+            <button type="submit">Edit</button>
+        </form>
+
+        <form method="post" action="delete" onsubmit="return confirm('Delete faq \'{{ faq.question }}\'?');">
+            {% csrf_token %}
+            <input type="hidden" name="faq_id" value="{{ faq.id }}">
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock content %}

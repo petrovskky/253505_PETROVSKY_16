@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Cinema{% endblock title %}</title>
+    <link rel="shortcut icon" href="/media/logo/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+        }
+    </style>
+
+    <meta name="author" content="Viktor Petrovsky" />
+    <meta name="description" content="Starlight is the leading cinema in Minsk, offering residents of the capital and guests of the city an immersion into the world of exciting big cinema. Equipped with the most modern equipment, this high-tech complex creates unique cinematic emotions for its visitors. Featuring an extensive collection of the latest film premieres, shown on huge screens using innovative projection and sound systems, Starlight guests receive a fully immersive experience of the action. The quality of image and sound allows you to immerse yourself in the cinematic atmosphere." />
+    {% block styles %}{% endblock styles %}
+</head>
+
+<body>
+    {% load static %}
+    <header>
+        <img src="{% static 'cinema_logo.png' %}" style="width: 50px; height: 50px; vertical-align: middle;" alt="starlight cinema logo" title="STARLIGHT Cinema">
+        <h2 style="display: inline-block; vertical-align: middle;">StarLight</h2>
+        <nav>
+            <a href="/">Main</a> |
+            <a href="/afisha">Poster</a> |
+            <a href="/news">News</a> |
+            <a href="/info">Info</a> |
+            <a href="/contacts">Contacts</a> |
+            <a href="/reviews">Reviews</a> |
+            <a href="/faq">FAQ</a> |
+            <a href="/coupons">Coupons</a> |
+            <a href="/vacancies">Vacancies</a> |
+            <a href="/privacy">Privacy policy</a> |
+            <a href="/sandbox">Sandbox</a>
+            {% if user.is_staff %}
+            | <a href="/tickets">Tickets</a>
+            {% endif %}
+            {% if user.is_superuser %}
+            | <a href="/users">Staff</a>
+            | <a href="/statistics">Statistics</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+            | <a href="/cart">Cart</a>
+            | <a href="/profile">Profile</a>
+            User: {{ user.username }}
+            <form action="{% url 'logout'%}?next={{request.path}}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login'%}?next={{request.path}}">| Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <h1>
+            {% block header %}{% endblock header %}
+        </h1>
+        {% block content %}{% endblock content %}
+    </main>
+
+    <hr>
+
+    <footer>
+        <p>© 2024, STARLIGHT Cinema</p>
+        <p>OOO Belcinema</p>
+        <p>Postal address: 220050, Minsk</p>
+        <p>Online store: starlight.by</p>
+        <p>Email: info@starlight.by</p>
+        <p>Petrovsky 2024</p>
+    </footer>
+</body>
+
+</html>

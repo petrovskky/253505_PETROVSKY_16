@@ -1,0 +1,75 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Showtimes{% endblock title %}
+{% block header %}Showtimes{% endblock header %}
+{% block content %}
+<section>
+    <h2>Filters</h2>
+
+    <form method="get">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{% if selected_date %}{{ selected_date }}{% endif %}" lang="en" onchange="this.form.submit()">
+        <label for="movie_title">Movie name:</label>
+        <input type="text" id="movie_title" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <form method="post">
+        <label for="sort_by">Sort by</label>
+        {% csrf_token %}
+        <select id="sort_by" name="sort_by">
+            <option value="rate">Rate</option>
+        </select>
+        <button type="submit">Sort</button>
+    </form>
+
+    <form method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</section>
+
+<section>
+    <h2>Showtime list</h2>
+
+    <div>
+        <form action="create">
+            <button type="submit">Add showtime</button>
+        </form>
+    </div>
+
+    <table>
+        <caption>Showtime List</caption>
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Ticket price</th>
+                <th>Overall profit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for showtime, profit in profits.items %}
+            <tr>
+                <td>{{ showtime.movie }}</td>
+                <td>{{ showtime.time|date:"Y-m-d" }}</td>
+                <td>{{ showtime.time|time:"H:i" }}</td>
+                <td>{{ showtime.price }}</td>
+                <td>{{ profit }}</td>
+                <td>
+                    <form method="post" action="delete">
+                        {% csrf_token %}
+                        <input type="hidden" name="showtime_id" value="{{ showtime.id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                    <form method="get" action="edit">
+                        <input type="hidden" name="showtime_id" value="{{ showtime.id }}">
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock content %}

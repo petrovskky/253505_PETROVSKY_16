@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+{% block title %}Sandbox{% endblock title %}
+{% block header %}Sandbox{% endblock header %}
+{% block content %}
+<div>
+    <h2>Listing Example</h2>
+    <p>
+        <code>
+            var movies = ["Inception", "The Matrix", "Interstellar"];<br>
+            document.write("I have watched " + movies.length + " movies.");
+        </code>
+    </p>
+    <p>The variable in this example is <var>movies</var>.</p>
+    <p>The output from the code is: <samp>I have watched 3 movies.</samp></p>
+    <p>When prompted for my favorite movie, I typed: <kbd>Inception</kbd>.</p>
+</div>
+{% endblock content %}

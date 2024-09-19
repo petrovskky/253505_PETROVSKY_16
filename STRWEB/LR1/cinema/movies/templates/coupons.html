@@ -1,0 +1,89 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Coupons{% endblock title %}
+{% block header %}Coupons{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<form method="get" action="create">
+    <button type="submit" tabindex="1">Create coupon</button>
+</form>
+{% endif %}
+<section>
+    <h2>Current coupons</h2>
+    {% if coupons %}
+    <table>
+        <caption>Coupon List</caption>
+        <thead>
+            <tr>
+                <th>Code Phrase</th>
+                <th>Discount</th>
+                {% if user.is_superuser %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for coupon in coupons %}
+            <tr>
+                <td><b>Code phrase: </b>{{ coupon.code_phrase }}</td>
+                <td><b>Discount: </b>{{ coupon.discount }}</td>
+                {% if user.is_superuser %}
+                <td>
+                    <form action="delete" method="post" onsubmit="return confirm('Delete coupon \'{{ coupon.code_phrase }}\'?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="coupon_id" value="{{ coupon.id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>
+        There are no coupons now.
+    </p>
+    {% endif %}
+</section>
+
+{% if user.is_superuser %}
+<section>
+    <h2>Coupons archive</h2>
+    {% if archived_coupons %}
+    <table>
+        <caption>Coupon Acrhive</caption>
+        <thead>
+            <tr>
+                <th>Code Phrase</th>
+                <th>Discount</th>
+                {% if user.is_superuser %}
+                <th>Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for coupon in archived_coupons %}
+            <tr>
+                <td><b>Code phrase: </b>{{ coupon.code_phrase }}</td>
+                <td><b>Discount: </b>{{ coupon.discount }}</td>
+                {% if user.is_superuser %}
+                <td>
+                    <form action="delete" method="post" onsubmit="return confirm('Delete coupon \'{{ coupon.code_phrase }}\'?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="coupon_id" value="{{ coupon.id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>
+        There are no coupons archived.
+    </p>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock content %}

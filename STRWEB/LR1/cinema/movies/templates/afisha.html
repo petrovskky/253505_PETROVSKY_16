@@ -1,0 +1,99 @@
+{% extends "base_generic.html" %}
+{% block title %}Movie poster{% endblock title %}
+{% block styles %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    th, td {
+        text-align: center;
+        border: 1px solid;
+    }
+
+    td p {
+        margin: 7px;
+    }
+
+    img {
+        height: 400px;
+        width: 280px;
+    }
+</style>
+{% endblock styles %}
+{% block header %}
+Poster - Minsk
+{% endblock header %}
+{% block content %}
+{% load custom_filters %}
+<section>
+    <h2>Filters</h2>
+    <form method="get">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" value="{% if selected_date %}{{ selected_date }}{% endif %}" lang="en" onchange="this.form.submit()" tabindex="1">
+        
+        <p>
+            Genre: <input list="genre_list" name="selected_genre">
+        </p>
+        <datalist id="genre_list" tabindex="2">
+            <option value="">All genres</option>
+            {% for genre in genres %}
+                <option value="{{ genre|lower }}" {% if genre|lower == selected_genre %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </datalist>
+    </form>
+    <form method="get">
+        <input type="search" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}" accesskey="m" tabindex="3" spellcheck pattern="[A-Za-z0-9 ]">
+        <button type="submit">Search</button>
+    </form>
+    <form method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</section>
+
+{% if user.is_superuser %}
+<section>
+    <h2>Management</h2>
+    <ul>
+        <li><a href="movies">Movies</a></li>
+        <li><a href="genres">Genres</a></li>
+        <li><a href="halls">Halls</a></li>
+        <li><a href="showtimes">Showtimes</a></li>
+    </ul>
+</section>
+{% endif %}
+{% if movies %}
+<section>
+    <h2>Movie list</h2>
+    <table>
+        <caption>Movie List</caption>
+        <tbody>
+            <tr>
+                {% for movie in movies %}
+                {% if forloop.counter0|divisibleby:3 and not forloop.first %}
+            </tr><tr>
+                {% endif %}
+                <td>
+                    <h2><a href="{{ movie.id }}">{{ movie.title }}</a></h2>
+                    <a href="{{ movie.id }}"><img src="{{ movie.poster.url }}" alt="{{ movie.title }}" title="{{ movie.title }}"></a>
+                    <p>Age: {{ movie.age_category }}+</p>
+                    <p>Genre: {{ movie.genres.all|join:', ' }}</p>
+                    <p>Duration: {{ movie.duration }}</p>
+                </td>
+                {% endfor %}
+                {% if not movies|length|divisibleby:3 and movies|length > 0 %}
+                    {% if movies|length|add:1|divisibleby:3 %}
+                        <td></td>
+                    {% else %}
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+</section>
+{% endif %}
+{% endblock content %}

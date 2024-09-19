@@ -1,0 +1,47 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Profile{% endblock title %}
+{% block styles %}
+<style>
+    img {
+        height: 280px;
+        width: 280px;
+    }
+</style>
+{% endblock styles %}
+{% block header %}Profile{% endblock header %}
+{% block content %}
+<section>
+    <h2>User Info</h2>
+    {% if user.photo %}
+    <img src="{{ user.photo.url }}" alt="{{ user.username }}">
+    {% endif %}
+    <p><b>Name: </b>{{ user.username }}</p>
+    <p><b>Email: </b>{{ user.email }}</p>
+    <p><b>Birth Date: </b>{{ user.birth_date }}</p>
+    <p><b>IP: </b>{{ ip }}</p>
+    {% if nationality %}
+    <p><b>Nationality: </b>{{ nationality }}</p>
+    {% endif %}
+    <p><b>Timezone: </b>{{ user_timezone }}</p>
+    <p><b>Current date: </b>{{ current_date_formatted }}</p>
+    <p><b>Calendar: </b>{{ calendar_text|safe }}</p>
+</section>
+
+<article>
+    <h2>My Tickets ({{ tickets.count }})</h2>
+    <ul>
+        {% for ticket in tickets %}
+        <li>
+            <p><b>Ticket {{ forloop.counter }}:</b></p>
+            <p><b>Movie: </b>{{ ticket.showtime.movie.title }}</p>
+            <p><b>Date: </b>{{ ticket.showtime.time|date:"Y-m-d" }}</p>
+            <p><b>Time: </b>{{ ticket.showtime.time|time:"H:i" }}</p>
+            <p><b>Hall: </b>{{ ticket.showtime.hall }}</p>
+            {% if ticket.coupon %}
+            <p><b>Coupon: </b>{{ ticket.coupon.code_phrase }} - {{ ticket.coupon.discount }}</p>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</article>
+{% endblock %}

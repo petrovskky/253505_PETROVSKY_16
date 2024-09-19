@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Stat{% endblock title %}
+{% block header %}Statistics{% endblock header %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <label for="stat_type">Statistics for:</label>
+    <select id="stat_type" name="stat_type" aria-label="Statistics type selection" tabindex="1">
+        <option value="clients" {% if stat_type == 'clients' %}selected{% endif %}>Clients</option>
+        <option value="movies" {% if stat_type == 'movies' %}selected{% endif %}>Movies</option>
+    </select>
+
+    <button type="submit" tabindex="2">Get Statistics</button>
+</form>
+{% if stat_type == 'movies' %}
+{% include 'movies_stat.html' %}
+{% elif stat_type == 'clients' %}
+{% include 'clients_stat.html' %}
+{% endif %}
+{% endblock content %}

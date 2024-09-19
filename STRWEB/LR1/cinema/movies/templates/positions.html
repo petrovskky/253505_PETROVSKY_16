@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema positions{% endblock title %}
+{% block header %}Positions{% endblock header %}
+{% block content %}
+<form action="create">
+    <input type="submit" value="Add position">
+</form>
+
+<table>
+    <caption>Position List</caption>
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for position in positions %}
+        <tr>
+            <td>{{ position.title }}</td>
+            <td>
+                <form method="post" action="delete" onsubmit="return confirm('Delete position \'{{ position.title }}\'?')">
+                    {% csrf_token %}
+                    <input type="hidden" name="position_id" value="{{ position.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+                <form method="get" action="edit">
+                    <input type="hidden" name="position_id" value="{{ position.id }}">
+                    <button type="submit">Edit</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

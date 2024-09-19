@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Reviews{% endblock title %}
+{% block header %}Reviews{% endblock header %}
+{% block content %}
+<div>
+    <form method="get" action="create">
+        <button type="submit" tabindex="1">Add Review</button>
+    </form>
+</div>
+
+<section>
+    <h2>Review list</h2>
+    {% if reviews %}
+    {% for review in reviews %}
+    <article>
+        <h3>Review by {{ review.user.username }}</h3>
+        <p><b>Rate: </b>{{ review.rate }}</p>
+        <p><b>Description: </b>{{ review.description }}</p>
+        <p><b>Time: </b><time datetime="{{ review.time|date:'Y-m-d H:i' }}">{{ review.time }}</time></p>
+        {% if user.is_superuser %}
+        <form method="post" action="delete" onsubmit="return confirm('Delete review by user \'{{ review.user.username }}\' at {{ review.time }}?')">
+            {% csrf_token %}
+            <input type="hidden" name="review_id" value="{{ review.id }}">
+            <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+    </article>
+    {% endfor %}
+    {% else %}
+    <p>
+        There are no reviews to display.
+    </p>
+    {% endif %}
+</section>
+{% endblock content %}

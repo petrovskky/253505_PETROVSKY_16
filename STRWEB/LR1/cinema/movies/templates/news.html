@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema News{% endblock title %}
+{% block styles %}
+<style>
+        img {
+            width: 500px;
+            height: auto;
+        }
+</style>
+{% endblock styles %}
+{% block header %}News{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<form method="get" action="create">
+    <button type="submit" tabindex="1">Add news</button>
+</form>
+{% endif %}
+<table>
+    <caption>News List</caption>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Image</th>
+            {% if user.is_superuser %}  
+            <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for news in news_list %}
+        <tr>
+            <td><strong>{{ news.0.title }}</strong></td>
+            <td>
+                {{ news.1 }}
+                <form method="get" action="{{ news.0.id }}">
+                    <button type="submit">Read more</button>
+                </form>
+            </td>
+            <td><img src="{{ news.0.image.url }}" alt="{{ news.0.title }}"></td>
+            {% if user.is_superuser %}
+            <td>
+                <form method="get" action="edit">
+                    <input type="hidden" name="news_id" value="{{ news.0.id }}">
+                    <button type="submit">Edit</button>
+                </form>
+
+                <form method="post" action="delete" onsubmit="return confirm('Are you sure you want to delete this news?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="news_id" value="{{ news.0.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

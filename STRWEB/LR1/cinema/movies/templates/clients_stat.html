@@ -1,0 +1,31 @@
+<!-- {% for client in clients %}
+{{ forloop.counter }}.
+{{ client }}
+{% endfor %}
+<table>
+    <tr>
+        <th>
+            Username
+        </th>
+        <th>
+            Tickets purchased
+        </th>
+        <th>
+            Favourite genre
+        </th>
+    </tr>
+    {% for client, stat in client_stats.items %}
+    <tr>
+        <td>
+            {{ client.username }}
+        </td>
+        <td>
+            {{ stat.tickets_purchased }}
+        </td>
+        <td>
+            {{ stat.favourite_genre }}
+        </td>
+    </tr>
+    {% endfor %}
+</table> -->
+{{ histogram_age|safe }}

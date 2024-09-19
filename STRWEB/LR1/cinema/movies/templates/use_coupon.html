@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Buying{% endblock title %}
+{% block header %}Buying a ticket{% endblock header %}
+{% block content %}
+<form action="" method="post">
+    <label for="coupon">Enter coupon</label>
+    <input type="text" id="coupon" name="entered_code">
+    {% csrf_token %}
+    <input type="submit" value="Buy">
+    {% if error %}
+    {{ error }}
+    {% endif %}
+</form>
+{% endblock content %}

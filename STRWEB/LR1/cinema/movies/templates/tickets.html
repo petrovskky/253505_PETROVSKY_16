@@ -1,0 +1,89 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Tickets{% endblock title %}
+{% block header %}Tickets{% endblock header %}
+{% block content %}
+<section>
+    <h2>Filters</h2>
+    <form method="get">
+        <label for="date_from">Sold from</label>
+        <input type="date" id="date_from" name="from_date" value="{% if selected_from_date %}{{ selected_from_date }}{% endif %}" lang="en" onchange="this.form.submit()">
+        <label for="date_to">to</label>
+        <input type="date" id="date_to" name="to_date" value="{% if selected_to_date %}{{ selected_to_date }}{% endif %}" lang="en" onchange="this.form.submit()">
+    </form>
+    <form method="get">
+        <input type="search" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}" accesskey="m" required>
+        <input type="submit" value="Search">
+    </form>
+    <form method="get">
+        <input type="search" name="client_username" placeholder="Client name" value="{{ client_username }}" accesskey="c" required>
+        <input type="submit" value="Search">
+    </form>
+    <form method="get">
+        <input type="search" name="cashier_username" placeholder="Cashier name" value="{{ cashier_username }}" accesskey="s" required>
+        <input type="submit" value="Search">
+    </form>
+    <form method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</section>
+
+
+
+<section>
+    <h2>Ticket list and revenue</h2>
+
+    <div>
+        <p>
+            <b>Overall profit: </b>{{ profit }}
+        </p>
+    </div>
+
+    {% if tickets %}
+    <table>
+        <caption>Ticket List</caption>
+        <thead>
+            <tr>
+                <th id="movie">Movie</th>
+                <th id="client">Client</th>
+                <th id="cashier">Cashier</th>
+                <th id="date">Date</th>
+                <th id="time">Time</th>
+                <th id="price">Price</th>
+                {% if user.is_superuser %}
+                <th id="actions">Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td headers="movie">{{ ticket.showtime.movie.title }}</td>
+                <td headers="client">{{ ticket.client.username }}</td>
+                <td headers="cashier">{{ ticket.cashier.user.username }}</td>
+                <td headers="date">{{ ticket.time|date:"Y-m-d" }}</td>
+                <td headers="time">{{ ticket.time|time:"H:i" }}</td>
+                <td headers="price">{{ ticket.showtime.price }}</td>
+                {% if user.is_superuser %}
+                <td headers="actions">
+                    <form action="delete" method="post" onsubmit="return confirm('Delete ticket \'{{ ticket }}\'?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                        <input type="submit" value="Delete">
+                    </form>
+                    <form action="edit" method="get">
+                        <input type="hidden" name="ticket_id" value="{{ ticket.id }}">
+                        <input type="submit" value="Edit">
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>
+        There is no tickets to dislpay.
+    </p>
+    {% endif %}
+</section>
+{% endblock content %}

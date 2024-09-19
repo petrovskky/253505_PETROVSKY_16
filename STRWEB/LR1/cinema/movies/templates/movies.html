@@ -1,0 +1,80 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Movies{% endblock title %}
+{% block header %}Movies{% endblock header %}
+{% block content %}
+{% load custom_filters %}
+<section>
+    <h2>Filters</h2>
+    <form method="get">
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genre" onchange="this.form.submit()">
+            <option value="">All genres</option>
+            {% for genre in genres %}
+                {% if forloop.counter0|divisibleby:3 %}
+                    {% if forloop.counter0 > 0 %}
+                        </optgroup>
+                    {% endif %}
+                    <optgroup label="Group {{ forloop.counter0|divide:3|add:1 }}">
+                {% endif %}
+                <option value="{{ genre|lower }}" {% if genre|lower == selected_genre %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </select>
+        <label for="movie_title">Movie name:</label>
+        <input type="text" id="movie_title" name="movie_title" placeholder="Movie name" value="{{ search_movie_title }}">
+        <label for="movie_country">Movie country:</label>
+        <input type="text" id="movie_country" name="movie_country" placeholder="Movie country" value="{{ search_movie_country }}">
+        <button type="submit">Search</button>
+    </form>
+    <form method="get">
+        <input type="submit" value="Clear filters">
+    </form>
+</section>
+
+<section>
+    <h2>Movie list</h2>
+    
+    <div>
+        <form method="get" action="create">
+            <input type="submit" value="Add movie">
+        </form>
+    </div>
+    
+    <table>
+        <caption>Movie List</caption>
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Age</th>
+                <th>Rate</th>
+                <th>Genres</th>
+                <th>Country</th>
+                <th>Duration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+            <tr>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.age_category }}</td>
+                <td>{{ movie.rate }}</td>
+                <td>{{ movie.genres.all|join:", " }}</td>
+                <td>{{ movie.country }}</td>
+                <td>{{ movie.duration }}</td>
+                <td>
+                    <form method="post" action="delete" onsubmit="return confirm('Delete hall \'{{ movie }}\'?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                    <form method="get" action="edit">
+                        <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock content %}

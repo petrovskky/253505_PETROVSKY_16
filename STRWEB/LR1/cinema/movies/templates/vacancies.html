@@ -1,0 +1,54 @@
+{% extends "base_generic.html" %}
+{% block title %}Vacancies - Starlight Cinema{% endblock title %}
+{% block header %}Vacancies{% endblock header %}
+{% block content %}
+{% if user.is_superuser %}
+<form action="create">
+    <input type="submit" value="Add vacancy" tabindex="1">
+</form>
+{% endif %}
+
+<section>
+    <h2>
+        Become part of our professional team: apply for the vacancy you are interested in!
+    </h2>
+
+    <ul>
+        {% for vacancy in vacancies %}
+        <li>
+            <h3>{{ vacancy.job.title }}</h3>
+            <a href="{{ vacancy.id }}">See the vacancy</a>
+            {% if user.is_superuser %}
+            <div>
+                <form method="get" action="edit">
+                    <input type="hidden" name="vacancy_id" value="{{ vacancy.id }}">
+                    <button type="submit">Edit</button>
+                </form>
+                <form method="post" action="delete" onsubmit="return confirm('Delete vacancy \'{{ vacancy }}\'?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="vacancy_id" value="{{ vacancy.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    
+
+        <!-- <div>
+            <h3>Senior Cinema Administrator</h3>
+            <a href="senior-cinema-administrator">See the vacancy</a>
+        </div>
+        
+        <div>
+            <h3>Hall Administrator</h3>
+            <a href="hall-administrator">See the vacancy</a>
+        </div>
+
+        <div>
+            <h3>Customer Service Specialist</h3>
+            <a href="customer-service-specialist">See the vacancy</a>
+        </div> -->
+</section>
+{% endblock content %}
