@@ -1,0 +1,68 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema{% endblock title %}
+{% block styles %}
+<style>
+    table td {
+        padding: 15px;
+    }
+    .partners {
+        text-align: center;
+    }
+    .partners img {
+        height: 40px; 
+        width: auto;
+    }
+    .banner {
+        text-align: center;
+        padding-top: 20px;
+    }
+    .banner img {
+        width: 60%;
+    }
+    .route {
+        text-align: center;
+    }
+</style>
+{% endblock styles %}
+{% block header %}Main Page{% endblock header %}
+{% block content %}
+{% load static %}
+<section itemscope itemtype="http://schema.org/NewsArticle">
+    <h2 itemprop="headline">{{ last_news.0.title }}</h2>    
+    <p itemprop="description">{{ last_news.1 }}</p>
+    <img itemprop="image" src="{{ last_news.0.image.url }}" alt="{{ last_news.0.title }}">
+</section>
+
+<div class="banner">
+    <a rel="nofollow" href="https://gameexpo.by/" target="_blank" draggable="false">
+        <img src="{% static 'banner.png' %}" alt="ad banner" draggable="false">
+    </a>
+</div>
+
+<div class="route">
+    <h2>How to get to us?</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2350.3005383122822!2d27.53805577596795!3d53.90863517245774!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcff2e7cf2fb5%3A0xe64de9029334d426!2z0YPQuy4g0JfQsNGB0LvQsNCy0YHQutCw0Y8gMTMsINCc0LjQvdGB0LosINCc0LjQvdGB0LrQsNGPINC-0LHQu9Cw0YHRgtGM!5e0!3m2!1sru!2sby!4v1723991733270!5m2!1sru!2sby" width="1000" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+<section class="partners">
+    <h2>Partners</h2>
+    {% if user.is_superuser %}
+    <form method="get" action="partner/create">
+        <button type="submit" tabindex="1">Add partner</button>
+    </form>
+    {% endif %}
+    {% for partner in partners %}
+    <a href="{{ partner.href }}" target="_blank"><img src="{{ partner.logo.url }}" alt="partner {{ partner.name }}" title="{{ partner.name }}"></a>
+    {% if user.is_superuser %}
+    <form method="post" action="partner/delete" onsubmit="return confirm('Delete partner \'{{ partner.name }}\'?')">
+        {% csrf_token %}
+        <input type="hidden" name="partner_id" value="{{ partner.id }}">
+        <input type="submit" value="Delete">
+    </form>
+    {% endif %}
+    {% endfor %}
+    <!-- <a href="https://www.coca-cola.com/" target="_blank"><img src="{% static 'Coca-Cola_logo.svg' %}" alt="partner" title="Coca-Cola"></a>
+    <a href="https://by.visa.com/" target="_blank"><img src="{% static 'visa_icon.svg' %}" alt="partner" title="VISA"></a>
+    <a href="https://www.mtbank.by/" target="_blank"><img src="{% static 'logo-mtbank.svg' %}" alt="partner" title="MTBank"></a> -->
+</section>
+{% endblock content %}

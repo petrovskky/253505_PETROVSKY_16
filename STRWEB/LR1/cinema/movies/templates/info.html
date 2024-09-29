@@ -1,0 +1,91 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Information{% endblock title %}
+{% block styles %}
+{% endblock styles %}
+{% block header %}Information{% endblock header %}
+{% block content %}
+{% load static %}
+<div>
+    <form method="get" action="edit">
+        <input type="hidden" name="info_id" value="{{ info.id }}">
+        <input type="submit" value="Edit company information">
+    </form>
+</div>
+
+<section>
+    <h2>About</h2>
+    
+    <figure style="text-align: center;">
+        <img src="{{ info.logo.url }}" alt="{{ info.name }} Logo" title="{{ info.name }}">
+        <figcaption>{{ info.name }}</figcaption>
+    </figure>
+
+    <!-- {% if user.is_superuser %}
+    <form method="get" action="edit">
+        <input type="hidden" name="info_id" value="{{ info.0.id }}">
+        <button type="submit">Edit</button>
+    </form>
+    {% endif %} -->
+    
+    {% if info %}
+    {{ info.information|linebreaks }}
+    {% endif %}
+
+    <a href="#history">History of the formation of our cinema</a> <br>
+    <a href="#contactinfo">Contact info</a>
+</section>
+
+<section>
+    <h2>Video</h2>
+    <blockquote cite="https://ru.wikiquote.org/wiki/%D0%90%D0%BB%D1%8C%D1%84%D1%80%D0%B5%D0%B4_%D0%A5%D0%B8%D1%87%D0%BA%D0%BE%D0%BA">
+        "Cinema consists of a screen and many chairs that need to be filled." - Alfred Hitchcock
+    </blockquote>
+    <video controls width="560" height="315" poster="{% static 'cinema-main-photo.png' %}">
+        <source src="{{ info.video.url }}" type="video/mp4">
+        Video cannot be displayed.  
+    </video>      
+</section>
+
+<section id="history">
+    <h2>History</h2>
+
+    <audio controls>
+        <source src="{% static 'film-projector.ogg' %}">
+        <source src="{% static 'film-projector.mp3' %}">
+        Audio content cannot be played.
+    </audio>
+    
+    {% if info %}
+    {{ info.history|linebreaks }}
+    {% endif %}
+</section>
+
+<article class="certificates">
+    <h2>Certificates</h2>
+    <p>{{ info.certificate_ru_head|safe|linebreaks }}</p>
+    <img src="{% static '1-min.jpg' %}" sizes="(max-width: 1000px) 95vw, 48vw" srcset="{% static '1-min_620.jpg' %} 620w, {% static '1-min.jpg' %} 1240w" alt="Certificate in Russian on the front">
+    <img src="{% static '3-min.jpg' %}" sizes="(max-width: 1000px) 95vw, 48vw" srcset="{% static '3-min_620.jpg' %} 620w, {% static '3-min.jpg' %} 1240w" alt="Certificate in English on the front">
+    <img src="{% static '2-min.jpg' %}" sizes="(max-width: 1000px) 95vw, 48vw" srcset="{% static '2-min_620.jpg' %} 620w, {% static '2-min.jpg' %} 1240w" alt="Certificate in Russian on the back">
+    <img src="{% static '4-min.jpg' %}" sizes="(max-width: 1000px) 95vw, 48vw" srcset="{% static '4-min_620.jpg' %} 620w, {% static '4-min.jpg' %} 1240w" alt="Certificate in English on the back">    
+    <!-- <p><b>СВИДЕТЕЛЬСТВО</b></p>
+    <p>о государственой регистрации</p>
+    <p>Минским горисполкомом</p>
+    <p>30 января 2015 г. в Единый государственный регистр юридических лиц и индивидуальных предпринимателей внесена запись о государственной регистрации</p>
+    <p><b>Общества с ограниченной ответственностью</b></p>
+    <p><b>"Старлайт Синема"</b></p>
+    <p><b>(ООО "Старлайт Синема")</b></p>
+    <p>с регистрационным номером 706848109</p>
+    <p>Заместитель начальника главного управления юстиции Мингорисполкома</p>
+    <p>В.В.Петровский</p> -->
+</article>
+
+<article id="contactinfo">
+    <h2>Contact info</h2>
+    <!-- <p><strong>Minsk, Zaslavskaya 13</strong></p>
+    <p>Cinema and contact center opening hours: mon-sun <strong>from 12:00 to 23:00</strong></p>
+    <p>Phone for consultations and booking tickets: +375447145515</p>
+    <p><b>E-mail: </b>info@starlight.by</p>
+    <p>For advertising, cooperation, hall rental and events: marketing@starlight.by</p> -->
+    {{ info.details|safe|linebreaks }}
+</article>
+{% endblock content %}

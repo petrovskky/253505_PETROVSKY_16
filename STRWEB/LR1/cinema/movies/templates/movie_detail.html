@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Movie{% endblock title %}
+{% block header %}Poster - Minsk{% endblock header %}
+{% block styles %}
+<style>
+    img {
+        height: 400px;
+        width: auto;
+    }
+</style>
+{% endblock styles %}
+{% block content %}
+<article>
+    <h2>{{ movie.title }}</h2>
+    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+    <p><b>Age: </b>{{ movie.age_category }}+</p>
+    <p><b>Rate: </b>{{ movie.rate }}</p>
+    <p><b>Genre: </b>{{ movie.genres.all|join:', ' }}</p>
+    <p><b>Duration: </b>{{ movie.duration }}</p>
+    <p><b>Description: </b>{{ movie.description }}</p>
+</article>
+
+
+<section>
+    <h2>Timetable</h2>
+    {% for showtime in showtimes %}
+    <div>
+        {{ forloop.counter }})
+        {{ showtime.time|date:"d F" }}, Hall: {{ showtime.hall }}, Time: {{ showtime.time|time:"H:i" }}, Price: {{ showtime.price }} BYN
+        {% if user.is_authenticated %}
+        <form action="{% url 'make_ticket' showtime.id %}" method="get">
+            <input type="submit" value="Buy">
+        </form>
+        <form action="{% url 'add_to_cart' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="showtime_id" value="{{ showtime.id }}">
+            <input type="submit" value="Add to cart">
+        </form>
+    </div>
+    {% endif %}
+    {% endfor %}
+</section>
+{% endblock content %}

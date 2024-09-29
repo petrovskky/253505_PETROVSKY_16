@@ -1,0 +1,62 @@
+{% extends "base_generic.html" %}
+{% block title %}Cinema Contacts{% endblock title %}
+{% block styles %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    th, td {
+        text-align: center;
+        border: 1px solid;
+    }
+
+    td p {
+        margin: 7px;
+    }
+
+    img {
+        height: 280px;
+        width: 280px;
+    }
+</style>
+{% endblock styles %}
+
+{% block header %}Contacts{% endblock header %}
+
+{% block content %}
+<table>
+    <caption>Contact List</caption>
+    <tbody>
+        <tr>
+            {% for employee in staff %}
+            {% if forloop.counter0|divisibleby:3 and not forloop.first %}
+        </tr><tr>
+            {% endif %}
+            <td>
+                {% if employee.user.photo %}
+                <img src="{{ employee.user.photo.url }}" alt="{{ employee.user.username }}">
+                {% else %}
+                {% load static %}
+                <img src="{% static 'default_employee_photo.png' %}">
+                {% endif %}
+                <p><b>Name: </b>{{ employee.user }}</p>
+                <p><b>Position: </b>{{ employee.job.title }}</p>
+                <p><b>Phone number: </b>{{ employee.user.phone_number }}</p>
+                <p><b>Email: </b>{{ employee.user.email }}</p>
+            </td>
+            {% endfor %}
+            {% if not staff|length|divisibleby:3 and staff|length > 0 %}
+                {% if staff|length|add:1|divisibleby:3 %}
+                    <td></td>
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
+            {% endif %}
+        </tr>
+    </tbody>
+</table>
+{% endblock content %}

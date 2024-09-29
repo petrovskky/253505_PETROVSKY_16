@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+{% block title %}Cart - Starlight Cinema{% endblock title %}
+{% block header %}Cart{% endblock header %}
+{% block content %}
+<section>
+    <h2>Cart- Tickets</h2>
+    {% if items %}
+    {% for item in items %}
+    <ul>
+        <li>
+            <h3><b>{{ item.showtime.movie.title }}</b></h3>
+            <p><b>Time: </b><time datetime="{{ item.showtime.time|date:'Y-m-d H:i' }}">{{ item.showtime.time }}</time></p>
+            <p><b>Price: </b>{{ item.showtime.price }}</p>
+            <p><b>Quantity: </b>{{ item.quantity }}</p>
+            <div>
+                <form method="post" action="edit">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <input type="submit" name="action" value="-1">
+                    <input type="submit" name="action" value="+1">
+                </form>
+                <form method="post" action="delete">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <input type="submit" value="Remove from cart">
+                </form>
+            </div>
+        </li>
+    </ul>
+    {% endfor %}
+    <div>
+        <span><b>Total price: </b>{{ total_price }}</span>
+        <form method="get" action="pay">
+            <input type="submit" value="Pay">
+        </form>
+    </div>
+    {% else %}
+    <p>
+        There are no tickets to display.
+    </p>
+    {% endif %}
+</section>
+{% endblock content %}

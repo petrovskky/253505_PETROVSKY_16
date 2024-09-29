@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+{% block title %}Vacancy {{ vacancy.job.title }} - Starlight Cinema{% endblock title %}
+{% block header %}{{ vacancy.job.title }}{% endblock header %}
+{% block content %}
+<div>
+    <p>
+        <b>Employment:</b>{{ vacancy.employment }} <br>
+        <b>Salary: </b>{{ vacancy.salary }} <br>
+        <b>Work experience: </b>{{ vacancy.work_experience }} <br>
+    </p>
+    
+    <p><b>What you will do:</b></p>
+    <ul>
+        {% for responsibility in responsibilities %}
+        <li>{{ responsibility }}</li>
+        {% endfor %}
+    </ul>
+    
+    <p><b>We expect the candidate to:</b></p>
+    <ul>
+        {% for expectation in expectations %}
+        <li>{{ expectation }}</li>
+        {% endfor %}
+    </ul>
+    
+    <p><b>We offer:</b></p>
+    <ul>
+        {% for offer in offers %}
+        <li>{{ offer }}</li>
+        {% endfor %}
+    </ul>
+    
+    <form method="get" action="mailto:job@starlight.by?object=Job-Response">
+        <button type="submit">Respond</button>
+    </form>
+</div>
+{% endblock content %}
